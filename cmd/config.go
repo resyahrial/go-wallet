@@ -64,9 +64,18 @@ func initProcessor() {
 		Brokers:         config.GetBroker(),
 		Stream:          config.Stream.Deposits,
 		MessageType:     new(deposit.DepositWrapper),
-		MessageListType: new(collectors.CollectorWrapper[*deposit.DepositRequest]),
+		MessageListType: new(deposit.BalanceWrapper),
 	})
 	grp.Go(balanceProcessor.Run(ctx))
+
+	thresholdProcessor := injector.InitBalanceProcessor(message.CollectorOpts{
+		Brokers:         config.GetBroker(),
+		Stream:          config.Stream.Deposits,
+		MessageType:     new(deposit.DepositWrapper),
+		MessageListType: new(collectors.CollectorWrapper[*deposit.DepositRequest]),
+	})
+	grp.Go(thresholdProcessor.Run(ctx))
+
 	go app.BalanceViewer.Run(ctx)
 
 	waiter := make(chan os.Signal, 1)
