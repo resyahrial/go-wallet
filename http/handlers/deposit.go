@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/lovoo/goka"
 	"github.com/resyarhial/go-wallet/internal/deposit"
 	httputils "github.com/resyarhial/go-wallet/pkg/http-utils"
 	"google.golang.org/protobuf/proto"
@@ -14,10 +15,12 @@ type DepositHandlerInterface interface {
 	Deposit(http.ResponseWriter, *http.Request)
 }
 
-type DepositHandler struct{}
+type DepositHandler struct {
+	emitter *goka.Emitter
+}
 
-func NewDepositHandler() DepositHandlerInterface {
-	return &DepositHandler{}
+func NewDepositHandler(emitter *goka.Emitter) DepositHandlerInterface {
+	return &DepositHandler{emitter: emitter}
 }
 
 func (h *DepositHandler) Deposit(w http.ResponseWriter, r *http.Request) {

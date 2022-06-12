@@ -8,14 +8,15 @@ package injector
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/lovoo/goka"
 	"github.com/resyarhial/go-wallet/http/handlers"
 	"github.com/resyarhial/go-wallet/http/router"
 )
 
 // Injectors from injector.go:
 
-func InitRouter() *mux.Router {
-	depositHandlerInterface := handlers.NewDepositHandler()
+func InitRouter(emitter *goka.Emitter) *mux.Router {
+	depositHandlerInterface := handlers.NewDepositHandler(emitter)
 	muxRouter := router.New(depositHandlerInterface)
 	return muxRouter
 }
