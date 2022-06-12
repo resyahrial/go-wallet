@@ -11,6 +11,9 @@ import (
 	"github.com/lovoo/goka"
 	"github.com/resyarhial/go-wallet/http/handlers"
 	"github.com/resyarhial/go-wallet/http/router"
+	"github.com/resyarhial/go-wallet/internal/deposit"
+	"github.com/resyarhial/go-wallet/message"
+	"github.com/resyarhial/go-wallet/message/collectors"
 )
 
 // Injectors from injector.go:
@@ -19,4 +22,10 @@ func InitRouter(emitter *goka.Emitter) *mux.Router {
 	depositHandlerInterface := handlers.NewDepositHandler(emitter)
 	muxRouter := router.New(depositHandlerInterface)
 	return muxRouter
+}
+
+func InitBalanceProcessor(opts message.CollectorOpts) collectors.BalanceCollectorInterface {
+	depositUsecaseInterface := deposit.New()
+	balanceCollectorInterface := collectors.NewBalanceCollector(depositUsecaseInterface, opts)
+	return balanceCollectorInterface
 }

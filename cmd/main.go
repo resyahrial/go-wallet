@@ -10,6 +10,7 @@ import (
 
 func main() {
 	initConfig()
+	initProcessor()
 	defer app.DepositEmitter.Finish()
 
 	r := injector.InitRouter(app.DepositEmitter)
