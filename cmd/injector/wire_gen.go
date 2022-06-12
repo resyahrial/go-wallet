@@ -18,9 +18,10 @@ import (
 
 // Injectors from injector.go:
 
-func InitRouter(emitter *goka.Emitter) *mux.Router {
+func InitRouter(emitter *goka.Emitter, balanceOpts handlers.BalanceOpts) *mux.Router {
 	depositHandlerInterface := handlers.NewDepositHandler(emitter)
-	muxRouter := router.New(depositHandlerInterface)
+	balanceHandlerInterface := handlers.NewBalanceHandler(balanceOpts)
+	muxRouter := router.New(depositHandlerInterface, balanceHandlerInterface)
 	return muxRouter
 }
 

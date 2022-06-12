@@ -4,16 +4,16 @@ import (
 	"context"
 )
 
-type DepositUsecaseInterface[T DepositRequest] interface {
-	Run(context.Context, []*T, interface{}) []*T
+type DepositUsecaseInterface interface {
+	Run(context.Context, []DepositRequest, interface{}) []DepositRequest
 }
 
-type DepositUsecase[T DepositRequest] struct{}
+type DepositUsecase struct{}
 
-func New[T DepositRequest]() DepositUsecaseInterface[T] {
-	return &DepositUsecase[T]{}
+func New() DepositUsecaseInterface {
+	return &DepositUsecase{}
 }
 
-func (u *DepositUsecase[T]) Run(ctx context.Context, currBalance []*T, input interface{}) (newBalance []*T) {
+func (u *DepositUsecase) Run(ctx context.Context, currBalance []DepositRequest, input interface{}) (newBalance []DepositRequest) {
 	return newBalance
 }

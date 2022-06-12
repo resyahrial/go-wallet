@@ -14,9 +14,10 @@ import (
 	"github.com/resyarhial/go-wallet/message/collectors"
 )
 
-func InitRouter(emitter *goka.Emitter) *mux.Router {
+func InitRouter(emitter *goka.Emitter, balanceOpts handlers.BalanceOpts) *mux.Router {
 	wire.Build(
 		handlers.NewDepositHandler,
+		handlers.NewBalanceHandler,
 		router.New,
 	)
 	return nil

@@ -9,8 +9,10 @@ import (
 
 func New(
 	depositHandler handlers.DepositHandlerInterface,
+	balanceHandler handlers.BalanceHandlerInterface,
 ) (router *mux.Router) {
 	router = mux.NewRouter()
 	router.HandleFunc("/deposit", depositHandler.Deposit).Methods(http.MethodPost)
+	router.HandleFunc("/details/:walletId", balanceHandler.GetBalance).Methods(http.MethodGet)
 	return
 }
