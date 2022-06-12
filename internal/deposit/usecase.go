@@ -8,7 +8,7 @@ import (
 )
 
 type DepositUsecaseInterface interface {
-	Balance(context.Context, interface{}, interface{}) []*DepositRequest
+	Balance(context.Context, interface{}, interface{}) *Balance
 	Threshold(context.Context, interface{}, interface{}) []*DepositRequest
 }
 
@@ -18,12 +18,22 @@ func New() DepositUsecaseInterface {
 	return &DepositUsecase{}
 }
 
-func (u *DepositUsecase) Balance(ctx context.Context, currBalance interface{}, input interface{}) (newBalance []*DepositRequest) {
-	if currBalance == nil {
+func (u *DepositUsecase) Balance(ctx context.Context, currBalance interface{}, input interface{}) (newBalance *Balance) {
+	var ok bool
+	var req *DepositRequest
+	if req, ok = input.(*DepositRequest); !ok {
 		return
 	}
 
-	newBalance = currBalance.([]*DepositRequest)
+	if currBalance == nil {
+		return &Balance{
+			WalletId: req.WalletId,
+			Amount:   req.Amount,
+		}
+	}
+
+	newBalance = currBalance.(*Balance)
+	newBalance.Amount += req.Amount
 	return newBalance
 }
 
