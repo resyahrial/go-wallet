@@ -32,13 +32,7 @@ func NewThresholdCollector(
 func (c *ThresholdCollector) Run(ctx context.Context) func() error {
 	return func() error {
 		p, err := message.NewProcessor(c.opts, ThresholdGroup, func(ctx goka.Context, msg interface{}) {
-			var messageList []deposit.DepositRequest
-			if v := ctx.Value(); v != nil {
-				messageList = v.([]deposit.DepositRequest)
-			}
-
-			messageList = c.usecase.Threshold(ctx.Context(), messageList, msg)
-			ctx.SetValue(messageList)
+			ctx.SetValue(c.usecase.Threshold(ctx.Context(), ctx.Value(), msg))
 		})
 		if err != nil {
 			return err
