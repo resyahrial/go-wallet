@@ -14,3 +14,9 @@ message Balance {
     string wallet_id = 1;
     float amount = 2;
 }
+
+message BalanceResponse {
+    string wallet_id = 1;
+    float amount = 2;
+    bool aboveThreshold = 3;
+}

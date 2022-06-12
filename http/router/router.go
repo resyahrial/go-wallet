@@ -13,6 +13,6 @@ func New(
 ) (router *mux.Router) {
 	router = mux.NewRouter()
 	router.HandleFunc("/deposit", depositHandler.Deposit).Methods(http.MethodPost)
-	router.HandleFunc("/details/:walletId", balanceHandler.GetBalance).Methods(http.MethodGet)
+	router.HandleFunc("/details/:wallet_id", balanceHandler.GetBalance).Methods(http.MethodGet)
 	return
 }
