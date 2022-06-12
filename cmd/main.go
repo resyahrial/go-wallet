@@ -10,6 +10,8 @@ import (
 
 func main() {
 	initConfig()
+	defer app.DepositEmitter.Finish()
+
 	r := injector.InitRouter(app.DepositEmitter)
 
 	log.Printf("Listen port 8080")

@@ -1,4 +1,4 @@
-package emitter
+package protoencoder
 
 import (
 	"errors"
@@ -7,13 +7,13 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func encode(value interface{}) ([]byte, error) {
+func Encode(value interface{}) ([]byte, error) {
 	if v, ok := value.(protoreflect.ProtoMessage); ok {
 		return proto.Marshal(v)
 	}
 	return nil, errors.New("invalid type: message value must be protobuf")
 }
 
-func decode(data []byte, protoMessage protoreflect.ProtoMessage) error {
+func Decode(data []byte, protoMessage protoreflect.ProtoMessage) error {
 	return proto.Unmarshal(data, protoMessage)
 }

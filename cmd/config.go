@@ -4,7 +4,8 @@ import (
 	"flag"
 
 	"github.com/resyarhial/go-wallet/cmd/app"
-	"github.com/resyarhial/go-wallet/message/emitter"
+	"github.com/resyarhial/go-wallet/internal/deposit"
+	"github.com/resyarhial/go-wallet/message"
 )
 
 var (
@@ -13,7 +14,7 @@ var (
 
 func initConfig() {
 	var err error
-	if app.DepositEmitter, err = emitter.New([]string{*broker}, "deposits", new(emitter.DepositCodec)); err != nil {
+	if app.DepositEmitter, err = message.NewEmitter([]string{*broker}, "deposits", new(deposit.DepositWrapper)); err != nil {
 		panic(err)
 	}
 
