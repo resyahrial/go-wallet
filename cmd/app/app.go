@@ -6,3 +6,4 @@ import (
 
 var DepositEmitter *goka.Emitter
 var BalanceViewer *goka.View
+var ThresholdViewer *goka.View

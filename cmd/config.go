@@ -51,7 +51,19 @@ func initWorkers() {
 		panic(err)
 	}
 
-	if app.BalanceViewer, err = message.NewViewer(message.ViewerOpts{}); err != nil {
+	if app.BalanceViewer, err = message.NewViewer(message.ViewerOpts{
+		Brokers:         config.GetBroker(),
+		Table:           collectors.BalanceTable,
+		MessageListType: new(deposit.BalanceWrapper),
+	}); err != nil {
+		panic(err)
+	}
+
+	if app.ThresholdViewer, err = message.NewViewer(message.ViewerOpts{
+		Brokers:         config.GetBroker(),
+		Table:           collectors.ThresholdTable,
+		MessageListType: new(collectors.CollectorWrapper[*deposit.DepositRequest]),
+	}); err != nil {
 		panic(err)
 	}
 }
@@ -77,6 +89,7 @@ func initProcessor() {
 	grp.Go(thresholdProcessor.Run(ctx))
 
 	go app.BalanceViewer.Run(ctx)
+	go app.ThresholdViewer.Run(ctx)
 
 	waiter := make(chan os.Signal, 1)
 	signal.Notify(waiter, syscall.SIGINT, syscall.SIGTERM)
