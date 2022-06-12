@@ -139,6 +139,69 @@ func (x *Balance) GetAmount() float32 {
 	return 0
 }
 
+type BalanceResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	WalletId       string  `protobuf:"bytes,1,opt,name=wallet_id,json=walletId,proto3" json:"wallet_id,omitempty"`
+	Amount         float32 `protobuf:"fixed32,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	AboveThreshold bool    `protobuf:"varint,3,opt,name=aboveThreshold,proto3" json:"aboveThreshold,omitempty"`
+}
+
+func (x *BalanceResponse) Reset() {
+	*x = BalanceResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_deposit_deposit_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BalanceResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BalanceResponse) ProtoMessage() {}
+
+func (x *BalanceResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_deposit_deposit_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BalanceResponse.ProtoReflect.Descriptor instead.
+func (*BalanceResponse) Descriptor() ([]byte, []int) {
+	return file_internal_deposit_deposit_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *BalanceResponse) GetWalletId() string {
+	if x != nil {
+		return x.WalletId
+	}
+	return ""
+}
+
+func (x *BalanceResponse) GetAmount() float32 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *BalanceResponse) GetAboveThreshold() bool {
+	if x != nil {
+		return x.AboveThreshold
+	}
+	return false
+}
+
 var File_internal_deposit_deposit_proto protoreflect.FileDescriptor
 
 var file_internal_deposit_deposit_proto_rawDesc = []byte{
@@ -158,7 +221,14 @@ var file_internal_deposit_deposit_proto_rawDesc = []byte{
 	0x3e, 0x0a, 0x07, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x12, 0x1b, 0x0a, 0x09, 0x77, 0x61,
 	0x6c, 0x6c, 0x65, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x77,
 	0x61, 0x6c, 0x6c, 0x65, 0x74, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
-	0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x02, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x42,
+	0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x02, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22,
+	0x6e, 0x0a, 0x0f, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x1b, 0x0a, 0x09, 0x77, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x5f, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x77, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x49, 0x64, 0x12,
+	0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x02, 0x52,
+	0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x26, 0x0a, 0x0e, 0x61, 0x62, 0x6f, 0x76, 0x65,
+	0x54, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x08, 0x52,
+	0x0e, 0x61, 0x62, 0x6f, 0x76, 0x65, 0x54, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x42,
 	0x15, 0x5a, 0x13, 0x2e, 0x2f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x64, 0x65,
 	0x70, 0x6f, 0x73, 0x69, 0x74, 0x2f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
@@ -175,14 +245,15 @@ func file_internal_deposit_deposit_proto_rawDescGZIP() []byte {
 	return file_internal_deposit_deposit_proto_rawDescData
 }
 
-var file_internal_deposit_deposit_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_internal_deposit_deposit_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_internal_deposit_deposit_proto_goTypes = []interface{}{
 	(*DepositRequest)(nil),        // 0: deposit.DepositRequest
 	(*Balance)(nil),               // 1: deposit.Balance
-	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
+	(*BalanceResponse)(nil),       // 2: deposit.BalanceResponse
+	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
 }
 var file_internal_deposit_deposit_proto_depIdxs = []int32{
-	2, // 0: deposit.DepositRequest.inserted_at:type_name -> google.protobuf.Timestamp
+	3, // 0: deposit.DepositRequest.inserted_at:type_name -> google.protobuf.Timestamp
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -220,6 +291,18 @@ func file_internal_deposit_deposit_proto_init() {
 				return nil
 			}
 		}
+		file_internal_deposit_deposit_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BalanceResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -227,7 +310,7 @@ func file_internal_deposit_deposit_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_internal_deposit_deposit_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

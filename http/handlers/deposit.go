@@ -31,4 +31,8 @@ func (h *DepositHandler) Deposit(w http.ResponseWriter, r *http.Request) {
 	if err := h.emitter.EmitSync(d.WalletId, &d); err != nil {
 		panic(err)
 	}
+	httputils.WriteResponse(w, map[string]interface{}{
+		"code":    http.StatusCreated,
+		"message": "deposit has been processed",
+	})
 }
