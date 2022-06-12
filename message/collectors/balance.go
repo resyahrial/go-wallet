@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	group goka.Group = "balance"
-	Table goka.Table = goka.GroupTable(group)
+	group        goka.Group = "balance"
+	BalanceTable goka.Table = goka.GroupTable(group)
 )
 
 type BalanceCollectorInterface interface {

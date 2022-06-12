@@ -26,6 +26,9 @@ func initConfig() {
 	if app.DepositEmitter, err = message.NewEmitter([]string{*broker}, *depositStream, new(deposit.DepositWrapper)); err != nil {
 		panic(err)
 	}
+	if app.BalanceViewer, err = message.NewViewer(message.ViewerOpts{}); err != nil {
+		panic(err)
+	}
 }
 
 func initProcessor() {
