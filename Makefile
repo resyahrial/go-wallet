@@ -7,3 +7,6 @@ unit-test:
 
 inject:
 	cd cmd/injector; wire
+
+run:
+	go run cmd/main.go

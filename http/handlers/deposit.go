@@ -2,9 +2,12 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 
-	"github.com/resyarhial/go-wallet/internal/models"
+	"github.com/resyarhial/go-wallet/internal/deposit"
 	httputils "github.com/resyarhial/go-wallet/pkg/http-utils"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type DepositHandlerInterface interface {
@@ -18,12 +21,18 @@ func NewDepositHandler() DepositHandlerInterface {
 }
 
 func (h *DepositHandler) Deposit(w http.ResponseWriter, r *http.Request) {
-	var deposit models.Deposit
-	if err := httputils.ReadRequestBody(r, &deposit); err != nil {
+	var d deposit.DepositRequest
+	if err := httputils.ReadRequestBody(r, &d); err != nil {
 		panic(err)
 	}
+	d.InsertedAt = timestamppb.New(time.Now().UTC())
 
-	if err := httputils.WriteResponse(w, deposit); err != nil {
+	var unmarshal deposit.DepositRequest
+	if res, err := proto.Marshal(&d); err != nil {
+		panic(err)
+	} else if err = proto.Unmarshal(res, &unmarshal); err != nil {
+		panic(err)
+	} else if err = httputils.WriteResponse(w, &unmarshal); err != nil {
 		panic(err)
 	}
 }

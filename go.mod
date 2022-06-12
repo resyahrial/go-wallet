@@ -2,7 +2,10 @@ module github.com/resyarhial/go-wallet
 
 go 1.18
 
-require github.com/sirupsen/logrus v1.8.1
+require (
+	github.com/sirupsen/logrus v1.8.1
+	google.golang.org/protobuf v1.28.0
+)
 
 require (
 	github.com/google/wire v0.5.0

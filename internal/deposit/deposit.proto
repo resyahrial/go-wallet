@@ -1,0 +1,11 @@
+syntax = "proto3";
+package deposit;
+import "google/protobuf/timestamp.proto";
+option go_package = "./internal/deposit/";
+// protoc --go_out=. ./internal/deposit/deposit.proto
+
+message DepositRequest {
+    string wallet_id = 1;
+    float amount = 2;
+    google.protobuf.Timestamp inserted_at = 3;
+}
