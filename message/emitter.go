@@ -2,6 +2,12 @@ package message
 
 import "github.com/lovoo/goka"
 
-func NewEmitter(brokers []string, stream string, messageType goka.Codec) (*goka.Emitter, error) {
-	return goka.NewEmitter(brokers, goka.Stream(stream), messageType)
+type EmitterOpts struct {
+	Brokers     []string
+	Stream      string
+	MessageType goka.Codec
+}
+
+func NewEmitter(opts EmitterOpts) (*goka.Emitter, error) {
+	return goka.NewEmitter(opts.Brokers, goka.Stream(opts.Stream), opts.MessageType)
 }

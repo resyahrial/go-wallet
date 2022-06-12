@@ -1,0 +1,6 @@
+broker:
+  host: "http://localhost"
+  port: "9092"
+
+stream:
+  deposits: "deposits"
