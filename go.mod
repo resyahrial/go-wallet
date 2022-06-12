@@ -37,5 +37,7 @@ require (
 require (
 	github.com/google/wire v0.5.0
 	github.com/gorilla/mux v1.8.0
+	github.com/thoas/go-funk v0.9.2
 	golang.org/x/sys v0.0.0-20220610221304-9f5ed59c137d // indirect
+	gopkg.in/yaml.v2 v2.4.0
 )

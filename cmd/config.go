@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"flag"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -14,18 +14,43 @@ import (
 	"github.com/resyarhial/go-wallet/message/collectors"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/sync/errgroup"
+	"gopkg.in/yaml.v2"
 )
 
-var (
-	broker        = flag.String("broker", "localhost:9092", "boostrap Kafka broker")
-	depositStream = flag.String("depositStream", "deposits", "deposit stream")
-)
+var config Configuration
 
-func initConfig() {
-	var err error
-	if app.DepositEmitter, err = message.NewEmitter([]string{*broker}, *depositStream, new(deposit.DepositWrapper)); err != nil {
+func initialize(env string) {
+	setConfig(env)
+	initWorkers()
+	initProcessor()
+}
+
+func setConfig(env string) {
+	confFilePath := fmt.Sprintf("config/%s.yml", env)
+	f, err := os.Open(confFilePath)
+	if err != nil {
 		panic(err)
 	}
+	defer f.Close()
+
+	decoder := yaml.NewDecoder(f)
+	if err = decoder.Decode(&config); err != nil {
+		panic(err)
+	}
+
+	log.SetOutput(os.Stdout)
+}
+
+func initWorkers() {
+	var err error
+	if app.DepositEmitter, err = message.NewEmitter(message.EmitterOpts{
+		Brokers:     config.GetBroker(),
+		Stream:      config.Stream.Deposits,
+		MessageType: new(deposit.DepositWrapper),
+	}); err != nil {
+		panic(err)
+	}
+
 	if app.BalanceViewer, err = message.NewViewer(message.ViewerOpts{}); err != nil {
 		panic(err)
 	}
@@ -36,12 +61,22 @@ func initProcessor() {
 	grp, ctx := errgroup.WithContext(ctx)
 
 	balanceProcessor := injector.InitBalanceProcessor(message.CollectorOpts{
-		Brokers:         []string{*broker},
-		Stream:          *depositStream,
+		Brokers:         config.GetBroker(),
+		Stream:          config.Stream.Deposits,
+		MessageType:     new(deposit.DepositWrapper),
+		MessageListType: new(deposit.BalanceWrapper),
+	})
+	grp.Go(balanceProcessor.Run(ctx))
+
+	thresholdProcessor := injector.InitBalanceProcessor(message.CollectorOpts{
+		Brokers:         config.GetBroker(),
+		Stream:          config.Stream.Deposits,
 		MessageType:     new(deposit.DepositWrapper),
 		MessageListType: new(collectors.CollectorWrapper[*deposit.DepositRequest]),
 	})
-	grp.Go(balanceProcessor.Run(ctx))
+	grp.Go(thresholdProcessor.Run(ctx))
+
+	go app.BalanceViewer.Run(ctx)
 
 	waiter := make(chan os.Signal, 1)
 	signal.Notify(waiter, syscall.SIGINT, syscall.SIGTERM)

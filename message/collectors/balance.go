@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	group        goka.Group = "balance"
-	BalanceTable goka.Table = goka.GroupTable(group)
+	BalanceGroup goka.Group = "balance"
+	BalanceTable goka.Table = goka.GroupTable(BalanceGroup)
 )
 
 type BalanceCollectorInterface interface {
@@ -31,14 +31,8 @@ func NewBalanceCollector(
 
 func (c *BalanceCollector) Run(ctx context.Context) func() error {
 	return func() error {
-		p, err := message.NewProcessor(c.opts, group, func(ctx goka.Context, msg interface{}) {
-			var messageList []deposit.DepositRequest
-			if v := ctx.Value(); v != nil {
-				messageList = v.([]deposit.DepositRequest)
-			}
-
-			messageList = c.usecase.Run(ctx.Context(), messageList, msg)
-			ctx.SetValue(messageList)
+		p, err := message.NewProcessor(c.opts, BalanceGroup, func(ctx goka.Context, msg interface{}) {
+			ctx.SetValue(c.usecase.Balance(ctx.Context(), ctx.Value(), msg))
 		})
 		if err != nil {
 			return err

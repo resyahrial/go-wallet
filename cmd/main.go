@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 
@@ -10,12 +11,20 @@ import (
 )
 
 func main() {
-	initConfig()
-	initProcessor()
+	var env string
+	flag.StringVar(&env,
+		"env",
+		"example",
+		"env of deployment, will load the respective yml conf file.",
+	)
+	flag.Parse()
+
+	initialize(env)
 	defer app.DepositEmitter.Finish()
 
 	r := injector.InitRouter(app.DepositEmitter, handlers.BalanceOpts{})
 
 	log.Printf("Listen port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
+
 }
