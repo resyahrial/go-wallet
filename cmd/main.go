@@ -22,7 +22,10 @@ func main() {
 	initialize(env)
 	defer app.DepositEmitter.Finish()
 
-	r := injector.InitRouter(app.DepositEmitter, handlers.BalanceOpts{})
+	r := injector.InitRouter(app.DepositEmitter, handlers.BalanceOpts{
+		BalanceViewer:   app.BalanceViewer,
+		ThresholdViewer: app.ThresholdViewer,
+	})
 
 	log.Printf("Listen port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
