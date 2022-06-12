@@ -5,7 +5,8 @@ import (
 )
 
 type DepositUsecaseInterface interface {
-	Run(context.Context, []DepositRequest, interface{}) []DepositRequest
+	Balance(context.Context, []DepositRequest, interface{}) []DepositRequest
+	Threshold(context.Context, []DepositRequest, interface{}) []DepositRequest
 }
 
 type DepositUsecase struct{}
@@ -14,6 +15,10 @@ func New() DepositUsecaseInterface {
 	return &DepositUsecase{}
 }
 
-func (u *DepositUsecase) Run(ctx context.Context, currBalance []DepositRequest, input interface{}) (newBalance []DepositRequest) {
+func (u *DepositUsecase) Balance(ctx context.Context, currBalance []DepositRequest, input interface{}) (newBalance []DepositRequest) {
+	return newBalance
+}
+
+func (u *DepositUsecase) Threshold(ctx context.Context, currBalance []DepositRequest, input interface{}) (newBalance []DepositRequest) {
 	return newBalance
 }

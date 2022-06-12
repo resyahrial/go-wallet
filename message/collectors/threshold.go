@@ -9,35 +9,35 @@ import (
 )
 
 var (
-	BalanceGroup goka.Group = "balance"
-	BalanceTable goka.Table = goka.GroupTable(BalanceGroup)
+	ThresholdGroup goka.Group = "threshold"
+	ThresholdTable goka.Table = goka.GroupTable(ThresholdGroup)
 )
 
-type BalanceCollectorInterface interface {
+type ThresholdCollectorInterface interface {
 	Run(context.Context) func() error
 }
 
-type BalanceCollector struct {
+type ThresholdCollector struct {
 	usecase deposit.DepositUsecaseInterface
 	opts    message.CollectorOpts
 }
 
-func NewBalanceCollector(
+func NewThresholdCollector(
 	usecase deposit.DepositUsecaseInterface,
 	opts message.CollectorOpts,
-) BalanceCollectorInterface {
-	return &BalanceCollector{usecase: usecase, opts: opts}
+) ThresholdCollectorInterface {
+	return &ThresholdCollector{usecase: usecase, opts: opts}
 }
 
-func (c *BalanceCollector) Run(ctx context.Context) func() error {
+func (c *ThresholdCollector) Run(ctx context.Context) func() error {
 	return func() error {
-		p, err := message.NewProcessor(c.opts, BalanceGroup, func(ctx goka.Context, msg interface{}) {
+		p, err := message.NewProcessor(c.opts, ThresholdGroup, func(ctx goka.Context, msg interface{}) {
 			var messageList []deposit.DepositRequest
 			if v := ctx.Value(); v != nil {
 				messageList = v.([]deposit.DepositRequest)
 			}
 
-			messageList = c.usecase.Balance(ctx.Context(), messageList, msg)
+			messageList = c.usecase.Threshold(ctx.Context(), messageList, msg)
 			ctx.SetValue(messageList)
 		})
 		if err != nil {
